@@ -1,0 +1,89 @@
+tupla_vendite = (
+                (("RepartoA","Informatica"),("Prodotto A", ("contanti",1000))),
+                (("RepartoA","Informatica"),("Prodotto B", ("carta di credito",1500))),
+                (("RepartoA","Informatica"),("Prodotto C", ("carta di credito",1200))),
+                (("RepartoA","Informatica"),("Prodotto D", ("contanti",200))),
+                (("RepartoA","Informatica"),("Prodotto E", ("contanti",800))),
+                (("RepartoA","Informatica"),("Prodotto F", ("N/D",200))),
+                (("RepartoB","Elettronica"),("Prodotto G", ("contanti",1500))),
+                (("RepartoB","Elettronica"),("Prodotto H", ("carta di credito",900)))
+                )
+
+
+print("MENU: ")
+print("1- mediaGlobale")
+print("2- media tramite categoria e metodo di pagamento")
+print("3- vendita massima e i prodotti")
+print("4- vendita minima nel reparto A")
+scelta=input("inserisci la tua scelta (6 per uscire)")
+
+
+while(scelta<6):
+    if scelta==1:
+        def media_globale(tupla_vendite):
+            sommaPagam=0
+            cont=0
+            for reparto,*altro in tupla_vendite:
+                for prodotto,*metodoPagamento in altro:
+                    for metodo,pagamento in metodoPagamento:
+                        if pagamento!="N/D":
+                            sommaPagam+=pagamento
+                            cont+=1
+            return(sommaPagam/cont)
+
+        mediaGlobale=media_globale(tupla_vendite)
+        print("la media globale delle vendite è pari a",mediaGlobale)
+    elif scelta==2:
+        cat=input("inserisci la categoria in cui vuoi calcolare la media: ")
+        tipoPagamento=input("inserisci la tipologia di pagamento in cui vuoi calcolare la media: (contanti o carta di credito)")
+
+        def media(tupla_vendite,cat,tipoPagamento):
+            sommaPagam=0
+            cont=0
+            for reparto,*altro in tupla_vendite:
+                if cat==reparto[1]:
+                    for prodotto,*metodoPagamento in altro:
+                        for metodo,pagamento in metodoPagamento:
+                            if metodo==tipoPagamento:
+                                sommaPagam+=pagamento
+                                cont+=1
+            return(sommaPagam/cont)
+
+        mediaCategoria=media(tupla_vendite,cat,tipoPagamento)
+        if mediaCategoria==None:
+            print("dati inseriti non corretti")
+        else:
+            print("la media di",cat,"e con metodo di pagamento",tipoPagamento,"è pari a",mediaCategoria)
+    
+    elif scelta==3:
+        def venditaMax(tupla_vendite):
+            max=-1
+            prodotti=[]
+            for reparto,*altro in tupla_vendite:
+                for prodotto,*metodoPagamento in altro:
+                    for metodo,pagamento in metodoPagamento:
+                        if pagamento>max:
+                            max=pagamento
+                            prodotti.clear()
+                            prodotti.append(prodotto)
+                        elif pagamento==max:
+                            prodotti.append(prodotto)
+            return(max,prodotti)
+
+        venditaMassima=venditaMax(tupla_vendite)
+        print("la vednita massima è stata pari a",venditaMassima[0],"e si è verificata nei prodotti:",venditaMassima[1])
+
+    elif scelta==4:
+        def venditaMin(tupla_vendite):
+            min=100000000
+            reparto1="RepartoA"
+            for reparto,*altro in tupla_vendite:
+                if reparto1==reparto[0]:
+                    for prodotto,*metodoPagamento in altro:
+                        for metodo,pagamento in metodoPagamento:
+                            if pagamento<min:
+                                min=pagamento
+            return(min)
+
+        venditaMinima=venditaMax(tupla_vendite)
+        print("la vednita inferiore registrata nel reparto A è pari a",venditaMinima)
